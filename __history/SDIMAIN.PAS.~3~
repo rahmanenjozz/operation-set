@@ -1,0 +1,231 @@
+unit SDIMAIN;
+
+interface
+
+uses Winapi.Windows, System.Classes, Vcl.Graphics, Vcl.Forms, Vcl.Controls,
+  Vcl.Menus, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, Vcl.ComCtrls,
+  Vcl.ImgList, Vcl.StdActns, Vcl.ActnList, Vcl.ToolWin, System.ImageList,
+  System.Actions;
+
+type
+  TSDIAppForm = class(TForm)
+    OpenDialog: TOpenDialog;
+    SaveDialog: TSaveDialog;
+    ActionList1: TActionList;
+    FileNew1: TAction;
+    FileOpen1: TAction;
+    FileSave1: TAction;
+    FileSaveAs1: TAction;
+    FileExit1: TAction;
+    EditCut1: TEditCut;
+    EditCopy1: TEditCopy;
+    EditPaste1: TEditPaste;
+    HelpAbout1: TAction;
+    StatusBar: TStatusBar;
+    ImageList1: TImageList;
+    MainMenu1: TMainMenu;
+    File1: TMenuItem;
+    FileNewItem: TMenuItem;
+    FileOpenItem: TMenuItem;
+    FileSaveItem: TMenuItem;
+    FileSaveAsItem: TMenuItem;
+    N1: TMenuItem;
+    FileExitItem: TMenuItem;
+    Edit1: TMenuItem;
+    CutItem: TMenuItem;
+    CopyItem: TMenuItem;
+    PasteItem: TMenuItem;
+    Help1: TMenuItem;
+    HelpAboutItem: TMenuItem;
+    Himpunan: TGroupBox;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Button1: TButton;
+    Button2: TButton;
+    GroupBox2: TGroupBox;
+    RadioButton1: TRadioButton;
+    Button3: TButton;
+    GroupBox3: TGroupBox;
+    ListBox3: TListBox;
+    Memo1: TMemo;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Memo2: TMemo;
+    RadioButton2: TRadioButton;
+    RadioButton3: TRadioButton;
+    procedure FileNew1Execute(Sender: TObject);
+    procedure FileOpen1Execute(Sender: TObject);
+    procedure FileSave1Execute(Sender: TObject);
+    procedure FileExit1Execute(Sender: TObject);
+    procedure HelpAbout1Execute(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+    procedure Edit3Change(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  SDIAppForm: TSDIAppForm;
+
+implementation
+
+uses About;
+
+{$R *.dfm}
+
+procedure TSDIAppForm.FileNew1Execute(Sender: TObject);
+begin
+  { Do nothing }
+end;
+
+procedure TSDIAppForm.FileOpen1Execute(Sender: TObject);
+begin
+  OpenDialog.Execute;
+end;
+
+procedure TSDIAppForm.FileSave1Execute(Sender: TObject);
+begin
+  SaveDialog.Execute;
+end;
+
+procedure TSDIAppForm.Edit2Change(Sender: TObject);
+var
+  lst: TStringList;
+  i : integer;
+begin
+  Label1.Caption := 'Himpunan A = { '+Edit2.Text+' }';
+  lst := TStringList.Create;
+
+  try
+    lst.LineBreak := ',';
+    lst.Text := Edit2.Text;
+    Memo1.Lines := lst;
+  finally
+    lst.Free;
+  end;
+end;
+
+procedure TSDIAppForm.Edit3Change(Sender: TObject);
+var
+  lst: TStringList;
+  i : integer;
+begin
+  Label2.Caption := 'Himpunan B = { '+Edit3.Text+' }';
+  lst := TStringList.Create;
+
+  try
+    lst.LineBreak := ',';
+    lst.Text := Edit3.Text;
+    Memo2.Lines := lst;
+  finally
+    lst.Free;
+  end;
+end;
+
+procedure TSDIAppForm.FileExit1Execute(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TSDIAppForm.Button2Click(Sender: TObject);
+begin
+  if messagedlg('Anda Ingin Keluar Aplikasi ini?',mtconfirmation,[mbYes,mbNo],0)=mrYes then
+  begin
+    application.Terminate;
+  end;
+end;
+
+procedure TSDIAppForm.Button3Click(Sender: TObject);
+var
+  i,j : integer;
+  stringdata : string;
+  data2: string;
+begin
+  if RadioButton1.Checked = true then
+  begin
+      stringdata:='';
+      for i := 0 to Memo1.Lines.Count-1 do
+      begin
+          if Memo2.Lines.IndexOf(Memo1.Lines[i])>=0 then
+          stringdata:=stringdata+''+Memo1.Lines.Strings[i]+',';
+      end;
+      ListBox3.Items.Add('');
+      ListBox3.Items.Add('Hasil Irisan kedua Himpunan :');
+      if stringdata='' then
+      begin
+          ListBox3.Items.Add('Tidak ada Irisan');
+      end
+      else
+      begin
+          ListBox3.Items.Add('A n B = { '+stringdata+' }');
+      end;
+      ListBox3.Items.Add('-------------------------');
+  end
+  else if RadioButton3.Checked = true then
+  begin
+      stringdata:='';
+      //for i := 0 to Memo1.Lines.Count-1 do
+      //begin
+          //if Memo2.Lines.IndexOf(Memo1.Lines[i])>=0 then
+          //begin
+              if Length(Edit2.Text) > Length(Edit3.Text) then
+              begin
+                  for i := 1 to Memo2.Lines.Count-1 do
+                  begin
+                      if Memo1.Lines.IndexOf(Memo2.Lines[i])>=0 then
+                      begin
+                        Memo1.Lines.Delete(i);
+                      end;
+                  end;
+              end
+              else
+              if Length(Edit2.Text) < Length(Edit3.Text) then
+              begin
+                  for i := 1 to Memo1.Lines.Count-1 do
+                  begin
+                      if Memo2.Lines.IndexOf(Memo1.Lines[i])>=0 then
+                      begin
+                        Memo1.Lines.Delete(i);
+                      end;
+                  end;
+              end
+              else
+              if Length(Edit2.Text) = Length(Edit3.Text) then
+              begin
+                  for i := 0 to 100 do
+                  begin
+                      if Memo2.Lines.IndexOf(Memo1.Lines[i])>=0 then
+                      begin
+                        Memo1.Lines.Delete(i);
+                      end;
+                  end;
+              end;
+         // end;
+          //if Memo2.Lines.IndexOf(Memo1.Lines[i])>=0 then
+          //Memo1.Lines.Delete(i);
+      //end;
+      for j := 0 to Memo1.Lines.Count-1 do
+      begin
+          stringdata:=stringdata+''+Memo1.Lines.Strings[j]+''+',';
+      end;
+      ListBox3.Items.Add('');
+      ListBox3.Items.Add('Hasil Selisih kedua Himpunan :');
+      ListBox3.Items.Add('A - B = { '+stringdata+' }');
+      ListBox3.Items.Add('-------------------------');
+  end;
+end;
+
+procedure TSDIAppForm.HelpAbout1Execute(Sender: TObject);
+begin
+  AboutBox.ShowModal;
+end;
+
+
+end.
